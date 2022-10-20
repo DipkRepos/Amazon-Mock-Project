@@ -6,7 +6,7 @@
 
 
 ## EPIC:
- You work for an e-commerce company as a prominent data consultant. Your job entails analyzing sales data. The company operates at a number of locations around the world. They want you to analyze the data from their daily and weekly sales transactions and derive significant insights to understand their sales in various cities and states. You've also been asked to include a variety of other details (that are provided below) about the product evaluation.
+ We work for an e-commerce company as a prominent data consultant. Our job entails analyzing sales data. The company operates at a number of locations around the world. They want us to analyze the data from their daily and weekly sales transactions and derive significant insights to understand their sales in various cities and states. we've also been asked to include a variety of other details (that are provided below) about the product evaluation.
 
 ## STORIES: 
 
@@ -40,24 +40,3 @@
 - Why do we need putty if we're using AWS EMR?
 - Is the data diff from CSV for streaming?
 - Why do we need to put results into HDFS and then into object storage like S3?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-t
-
-
-
-
