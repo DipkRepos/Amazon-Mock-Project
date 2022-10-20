@@ -1,20 +1,20 @@
-# Amazon-Mock-Project
+## Amazon-Mock-Project
 
-Devlopers : Rohitya, Nikhil, Deepak, Aniket 
-Mentor: Senthilanathan Kalyanasundaram
-Manager/Client: Namdam Karthik
+#Devlopers : Rohitya, Nikhil, Deepak, Aniket 
+#Mentor: Senthilanathan Kalyanasundaram
+#Manager/Client: Namdam Karthik
 
 
 EPIC: You work for an e-commerce company as a prominent data consultant. Your job entails analyzing sales data. The company operates at a number of locations around the world. They want you to analyze the data from their daily and weekly sales transactions and derive significant insights to understand their sales in various cities and states. You've also been asked to include a variety of other details (that are provided below) about the product evaluation.
 
 STORIES: 
 
---Setting up the environment for the group & Configure the necessary dependencies.
-Creating GitHub repo and cloning it into everyone’s local system, 
-Setting up  AWS for S3 buckets, EMR, dynamo-DB and other services, 
-Installing and setting up Spark IDLE/Shell to write the SQL queries,
-Logging into putty to set up the Hadoop cluster.
-Import necessary packages in the different environments mentioned above.
+- Setting up the environment for the group & Configure the necessary dependencies.
+    - Creating GitHub repo and cloning it into everyone’s local system, 
+    - Setting up  AWS for S3 buckets, EMR, dynamo-DB and other services, 
+    - Installing and setting up Spark IDLE/Shell to write the SQL queries,
+    - Logging into putty to set up the Hadoop cluster.
+    - Import necessary packages in the different environments mentioned above.
 
 --Data Ingestion:
 Create a bucket (for example S3 and Azure Blob) and upload the CSV file
