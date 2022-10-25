@@ -40,3 +40,52 @@
 - Why do we need putty if we're using AWS EMR?
 - Is the data diff from CSV for streaming?
 - Why do we need to put results into HDFS and then into object storage like S3?
+- Why do we need to put data into hive then to HDFS, why not directly?
+
+'''
+create or replace file format mycsvformat
+  type = 'CSV'
+  field_delimiter = ','
+  skip_header = 0;
+  
+create or replace stage project_stage
+  file_format = mycsvformat 
+  url='s3://mock-project-bucket/olist_public_dataset.csv';
+
+show stages;
+
+drop stage my_csv_stage; //droping unnecesssary stages
+
+show stages;
+
+list @project_stage;
+
+create or replace table amazon_data_table 
+(
+ id int,order_status string,
+ order_products_value double,
+ order_freight_value double,
+ order_items_qty double,
+ customer_city string,
+ customer_state string,
+ customer_zip_code_prefix int,
+ product_name_length int,
+ product_description_length int,
+ product_photos_qty int,
+ review_score double,
+ order_purchase_timestamp date_part(<date_or_time_part>, <date_or_time_expr>),
+ order_aproved_at date_part(<date_or_time_part>, <date_or_time_expr>),
+ order_delivered_customer_date date_part(<date_or_time_part>, <date_or_time_expr>) 
+); 
+
+copy into amazon_data_table from @project_stage 
+pattern='.*.csv' 
+file_format = (type = csv field_delimiter = ',' skip_header = 0);
+
+copy into amazon_data_table
+  from @project_stage/olist_public_dataset.csv
+  on_error = 'skip_file';
+
+
+select * from amazon_data_table;
+'''
