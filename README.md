@@ -42,7 +42,7 @@
 - Why do we need to put results into HDFS and then into object storage like S3?
 - Why do we need to put data into hive then to HDFS, why not directly?
 
-'''
+```
 create or replace file format mycsvformat
   type = 'CSV'
   field_delimiter = ','
@@ -88,4 +88,4 @@ copy into amazon_data_table
 
 
 select * from amazon_data_table;
-'''
+```
