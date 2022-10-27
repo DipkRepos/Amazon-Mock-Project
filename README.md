@@ -1,6 +1,6 @@
 # Amazon-Mock-Project
 
-## Devlopers : Rohitya, Nikhil, Deepak, Aniket 
+## Devlopers : Rohithya, Nikhil, Deepak, Aniket 
 ## Mentor: Senthilanathan Kalyanasundaram
 ## Manager/Client: Namdam Karthik
 
@@ -10,30 +10,43 @@
 
 ## STORIES: 
 
-- Setting up the environment for the group & Configure the necessary dependencies.
-    - Creating GitHub repo and cloning it into everyone’s local system, 
-    - Setting up  AWS for S3 buckets, EMR, dynamo-DB and other services, 
-    - Installing and setting up Spark IDLE/Shell to write the SQL queries,
-    - Logging into putty to set up the Hadoop cluster.
-    - Import necessary packages in the different environments mentioned above.
+- Setting up AWS S3 Bucket
+“Create AWS s3 bucket to load the given sales data csv file into it”
+- Setting up the Hive environment
+“Install Hive locally to load the data ”
+- Defining Schema for hive table
+“Create a table with specific schema so that we can load csv file data into the table without any issue”
+- Setting up the HDFS environment
+“Install Hadoop ecosystem for HDFS setup to store the csv file data ”
+- Setting up the Spark environment
+“Install pyspark to run queries on sales data”
+- Setting up the NOSQL DB environment
+“Set up NOSQL DB(MongoDB) locally to save the queries output”
+- Loading csv file into S3 bucket
+“Upload the csv file into the AWS S3 bucket”
+- Loading csv file into Hive
+“Upload the csv file into the Hive table which we have already created”
+- Loading hive table into HDFS
+“Export the hive table into HDFS by creating a new directory”
+- Querying data city wise
+“Total sales and order distribution per day and week for each city”
+- Querying data state wise
+“Total sales and order distribution per day and week for each state”
+- Querying data for average reports
+“Average review score, average freight value, average order approval, and delivery time”
+- Querying data for freight charges
+“The freight charges per city and total freight charges”
+- Defining document structure for NOSQL DB
+“Define query output document structure for NOSQL DB ”
+- Converting query output into the required format
+“Convert the query output into the document structure defined above and save it locally”
+- Exporting query output to NOSQL DB
+“Loading query results into NOSQL DB after changing the format for insights”
+- Exporting query output to HDFS
+    “Loading query results into HDFS for insights”
+- Exporting query output to S3
+    “Loading query results into S3 for easy access”
 
-- Data Ingestion:
-    - Create a bucket (for example S3 and Azure Blob) and upload the CSV file
-    - Load the data from the bucket into the Hive table
-    - Create a new directory in HDFS and copy the data from Hive into HDFS.
-    - Check if the data has been successfully loaded in the HDFS path
- 
-- Writing Queries:
-    - Total sales and order distribution per day and week for each city
-    - Total sales and order distribution per day and week for each state.
-    - Average review score, average freight value, average order approval, and delivery time.
-    - The freight charges per city and total freight charges.
-
-- Data analysis and visualization:
-    - Write the results into HDFS (refer to QUE)
-    - Save the final dataset into object storage service per the cloud platform
-    - Create a DB cluster that is also a NoSQL using the relevant service on the cloud platform
-    - Save insights in the NoSQL DB mentioned in the previous step
  
 
 ## Questions:
