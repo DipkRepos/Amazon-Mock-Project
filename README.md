@@ -47,7 +47,8 @@
 - Exporting query output to S3
     - Loading query results into S3 for easy access
 
- 
+## Procedure to run the project
+
 
 ## Commands
 ```
