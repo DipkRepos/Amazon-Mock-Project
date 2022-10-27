@@ -11,50 +11,45 @@
 ## STORIES: 
 
 - Setting up AWS S3 Bucket
-“Create AWS s3 bucket to load the given sales data csv file into it”
+    - “Create AWS s3 bucket to load the given sales data csv file into it”
 - Setting up the Hive environment
-“Install Hive locally to load the data ”
+    - “Install Hive locally to load the data ”
 - Defining Schema for hive table
-“Create a table with specific schema so that we can load csv file data into the table without any issue”
+    - “Create a table with specific schema so that we can load csv file data into the table without any issue”
 - Setting up the HDFS environment
-“Install Hadoop ecosystem for HDFS setup to store the csv file data ”
+    - “Install Hadoop ecosystem for HDFS setup to store the csv file data ”
 - Setting up the Spark environment
-“Install pyspark to run queries on sales data”
+    - “Install pyspark to run queries on sales data”
 - Setting up the NOSQL DB environment
-“Set up NOSQL DB(MongoDB) locally to save the queries output”
+    - “Set up NOSQL DB(MongoDB) locally to save the queries output”
 - Loading csv file into S3 bucket
-“Upload the csv file into the AWS S3 bucket”
+    - “Upload the csv file into the AWS S3 bucket”
 - Loading csv file into Hive
-“Upload the csv file into the Hive table which we have already created”
+    - “Upload the csv file into the Hive table which we have already created”
 - Loading hive table into HDFS
-“Export the hive table into HDFS by creating a new directory”
+    - “Export the hive table into HDFS by creating a new directory”
 - Querying data city wise
-“Total sales and order distribution per day and week for each city”
+    - “Total sales and order distribution per day and week for each city”
 - Querying data state wise
-“Total sales and order distribution per day and week for each state”
+ - “Total sales and order distribution per day and week for each state”
 - Querying data for average reports
-“Average review score, average freight value, average order approval, and delivery time”
+    - “Average review score, average freight value, average order approval, and delivery time”
 - Querying data for freight charges
-“The freight charges per city and total freight charges”
+    - “The freight charges per city and total freight charges”
 - Defining document structure for NOSQL DB
-“Define query output document structure for NOSQL DB ”
+    - “Define query output document structure for NOSQL DB ”
 - Converting query output into the required format
-“Convert the query output into the document structure defined above and save it locally”
+    - “Convert the query output into the document structure defined above and save it locally”
 - Exporting query output to NOSQL DB
-“Loading query results into NOSQL DB after changing the format for insights”
+    - “Loading query results into NOSQL DB after changing the format for insights”
 - Exporting query output to HDFS
-    “Loading query results into HDFS for insights”
+    - “Loading query results into HDFS for insights”
 - Exporting query output to S3
-    “Loading query results into S3 for easy access”
+    - “Loading query results into S3 for easy access”
 
  
 
-## Questions:
-- Why do we need putty if we're using AWS EMR?
-- Is the data diff from CSV for streaming?
-- Why do we need to put results into HDFS and then into object storage like S3?
-- Why do we need to put data into hive then to HDFS, why not directly?
-
+## Commands
 ```
 create or replace file format mycsvformat
   type = 'CSV'
