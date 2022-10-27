@@ -31,7 +31,7 @@
 - Querying data city wise
     - “Total sales and order distribution per day and week for each city”
 - Querying data state wise
- - “Total sales and order distribution per day and week for each state”
+     - “Total sales and order distribution per day and week for each state”
 - Querying data for average reports
     - “Average review score, average freight value, average order approval, and delivery time”
 - Querying data for freight charges
