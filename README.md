@@ -71,7 +71,8 @@ list @project_stage;
 
 create or replace table amazon_data_table 
 (
- id int,order_status string,
+ id int,
+ order_status string,
  order_products_value double,
  order_freight_value double,
  order_items_qty double,
