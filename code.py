@@ -1,3 +1,4 @@
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf,col 
 
@@ -9,8 +10,8 @@ spark = SparkSession.builder.appName (" Analytics project session").getOrCreate(
 # .load('final_data.csv') \
 # .toDF()
 
-csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True)
-csv_df.printSchema()
+csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True )
+
 #csv_df.show(10)
 
 #changing datatype of dataset to timestamp from string
@@ -26,7 +27,7 @@ csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_t
 csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_weekday", UDF_weekday(col("order_purchase_timestamp")))
 
-# csv_df.show(2,vertical=True)
+csv_df.show(2,vertical=True)
 
 csv_df.createOrReplaceTempView("ecommerce")
 
