@@ -50,7 +50,7 @@
 ## Procedure to run the project
 
 
-## Commands
+## Commands (Snowflake)
 ```
 create or replace file format mycsvformat
   type = 'CSV'
@@ -99,3 +99,39 @@ copy into amazon_data_table
 
 select * from amazon_data_table;
 ```
+
+# Setting up local environment (Docker, Hive, HDFS, SPARK)
+DOCKER
+```
+docker pull cloudera/quickstart:latest
+
+docker images
+
+docker run --hostname=quickstart.cloudera --privileged=true -t -i -p 8080:50070 -p 8081:50075 -p 8020:8020 -p 9000:9000 -v /Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data:/Storage 4239cd /usr/bin/docker-quickstart
+```
+
+HDFS
+```
+hadoop fs -mkdir /Storage_HDFS
+hadoop fs -copyFromLocal Storage/olist_public_dataset.csv /Storage_HDFS/
+```
+
+HIVE
+```
+set hive.enforce.bucketing = true;
+set hive.exec.dynamic.partition=true;
+set hive.optimize.sort.dynamic.partition=true;
+set hive.exec.dynamic.partition.mode=strict;
+set hive.exec.max.dynamic.partitions.pernode=100000;
+set hive.exec.max.dynamic.partitions=100000;
+
+
+CREATE EXTERNAL TABLE amazon_table (id int,order_status string,order_products_value double,order_freight_value double,order_items_qty double,customer_city string,customer_state string,customer_zip_code_prefix int,product_name_length int,product_description_length int,product_photos_qty int,review_score double,order_purchase_timestamp timestamp,order_aproved_at varchar[],order_delivered_customer_date timestamp) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/Storage_HDFS';     
+
+ALTER TABLE amazon_table SET SERDEPROPERTIES ("timestamp.formats"="DD/MM/YY HH:mm");
+
+INSERT OVERWRITE DIRECTORY '/Storage_HDFS_output/cleaned_data.csv' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM amazon_table;
+
+!hadoop fs -get /Storage_HDFS_output/cleaned_data.csv /Storage;
+```
+
