@@ -10,7 +10,12 @@ spark = SparkSession.builder.appName (" Analytics project session").getOrCreate(
 # .load('final_data.csv') \
 # .toDF()
 
+
 csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True )
+
+
+csv_df = spark.read.csv ('/Users/ymnikhil/Important_Documents/Mock-Project/Amazon-Mock-Project/final_data.csv',sep = ',', header = True)
+csv_df.printSchema()
 
 #csv_df.show(10)
 
