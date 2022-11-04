@@ -172,3 +172,5 @@ pip install pyspark
 
 I would better suggest using pycharm because it will create a virtual environment on its own.
 ```
+
+[Results of city-wise queries](https://docs.google.com/document/d/1cAs5sppIqbSO3OZIO7Z-aUHW9mwMmtCMGS4FbYxkyhA/edit#)
