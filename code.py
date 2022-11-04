@@ -20,7 +20,7 @@ csv_df = spark.read \
   .toDF(*header.columns)
   
 # csv_df.printSchema()
-#csv_df.show(10)
+# csv_df.show(10)
 
 #changing datatype of dataset to timestamp from string
 csv_df = csv_df.withColumn('order_purchase_timestamp', csv_df['order_purchase_timestamp'].cast('timestamp'))
@@ -137,7 +137,7 @@ total_sales_state_wise="select customer_state as state,order_purchase_year as ye
 # spark.sql(total_sales_state_wise).show(2,vertical=True)
 
 #WEEKLY Insight for orders
-#Orders
+#Orders (one row in dataset is one order)
 #Query 1, Total no of order
 total_orders="select order_purchase_year as year,order_purchase_week as week, \
     SUM(order_items_qty) as Total_order\
