@@ -108,6 +108,8 @@ docker pull cloudera/quickstart:latest
 docker images
 
 docker run --hostname=quickstart.cloudera --privileged=true -t -i -p 8080:50070 -p 8081:50075 -p 8020:8020 -p 9000:9000 -v /Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data:/Storage 4239cd /usr/bin/docker-quickstart
+
+docker exec -it ed sh                                    
 ```
 
 HDFS
