@@ -157,3 +157,18 @@ INSERT OVERWRITE DIRECTORY '/Storage_HDFS_output/cleaned_data.csv' ROW FORMAT DE
 !hadoop fs -get /Storage_HDFS_output/cleaned_data.csv /Storage;
 ```
 
+SPARK
+```
+Download and install any IDE such as PyCharm community edition or Visual Studio Code 
+Create a folder where you will like to store the project files
+Open the folder using any of the IDE that you installed
+
+PyCharm has an advantage of creating its virtual environment on its own.
+For VS Code, we need to create a virtual environment by following the below commands:
+python3 -m venv mock-p
+source mock-p/bin/activate
+This below command is used to install pyspark in both the IDE’s
+pip install pyspark
+
+I would better suggest using pycharm because it will create a virtual environment on its own.
+```
