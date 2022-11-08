@@ -1,56 +1,58 @@
 # Amazon-Mock-Project
 
-## Devlopers : Rohithya, Nikhil, Deepak, Aniket 
+## Devlopers : Rohithya, Nikhil, Deepak, Aniket
+
 ## Mentor: Senthilanathan Kalyanasundaram
+
 ## Manager/Client: Namdam Karthik
 
-
 ## EPIC:
+
  We work for an e-commerce company as a prominent data consultant. Our job entails analyzing sales data. The company operates at a number of locations around the world. They want us to analyze the data from their daily and weekly sales transactions and derive significant insights to understand their sales in various cities and states. we've also been asked to include a variety of other details (that are provided below) about the product evaluation.
 
-## STORIES: 
+## STORIES:
 
 - Setting up AWS S3 Bucket
-    - Create AWS s3 bucket to load the given sales data csv file into it
+  - Create AWS s3 bucket to load the given sales data csv file into it
 - Setting up the Hive environment
-    - Install Hive locally to load the data
+  - Install Hive locally to load the data
 - Defining Schema for hive table
-    - Create a table with specific schema so that we can load csv file data into the table without any issue
+  - Create a table with specific schema so that we can load csv file data into the table without any issue
 - Setting up the HDFS environment
-    - Install Hadoop ecosystem for HDFS setup to store the csv file data
+  - Install Hadoop ecosystem for HDFS setup to store the csv file data
 - Setting up the Spark environment
-    - Install pyspark to run queries on sales data
+  - Install pyspark to run queries on sales data
 - Setting up the NOSQL DB environment
-    - Set up NOSQL DB(MongoDB) locally to save the queries output
+  - Set up NOSQL DB(MongoDB) locally to save the queries output
 - Loading csv file into S3 bucket
-    - Upload the csv file into the AWS S3 bucket
+  - Upload the csv file into the AWS S3 bucket
 - Loading csv file into Hive
-    - Upload the csv file into the Hive table which we have already created
+  - Upload the csv file into the Hive table which we have already created
 - Loading hive table into HDFS
-    - Export the hive table into HDFS by creating a new directory
+  - Export the hive table into HDFS by creating a new directory
 - Querying data city wise
-    - Total sales and order distribution per day and week for each city
+  - Total sales and order distribution per day and week for each city
 - Querying data state wise
-     - Total sales and order distribution per day and week for each state
+  - Total sales and order distribution per day and week for each state
 - Querying data for average reports
-    - Average review score, average freight value, average order approval, and delivery time
+  - Average review score, average freight value, average order approval, and delivery time
 - Querying data for freight charges
-    - The freight charges per city and total freight charges
+  - The freight charges per city and total freight charges
 - Defining document structure for NOSQL DB
-    - Define query output document structure for NOSQL DB 
+  - Define query output document structure for NOSQL DB
 - Converting query output into the required format
-    - Convert the query output into the document structure defined above and save it locally
+  - Convert the query output into the document structure defined above and save it locally
 - Exporting query output to NOSQL DB
-    - Loading query results into NOSQL DB after changing the format for insights
+  - Loading query results into NOSQL DB after changing the format for insights
 - Exporting query output to HDFS
-    - Loading query results into HDFS for insights
+  - Loading query results into HDFS for insights
 - Exporting query output to S3
-    - Loading query results into S3 for easy access
+  - Loading query results into S3 for easy access
 
 ## Procedure to run the project
 
-
 ## Commands (Snowflake)
+
 ```
 create or replace file format mycsvformat
   type = 'CSV'
@@ -100,9 +102,10 @@ copy into amazon_data_table
 select * from amazon_data_table;
 ```
 
-# Setting up local environment (Docker, Hive, HDFS, SPARK)
-INSTALL DOCKER AND PULL CLOUDERA IMAGE IN IT.
+# Setting up local environment ( Docker, Hive, HDFS, SPARK )
+
 DOCKER
+
 ```
 docker pull cloudera/quickstart:latest
 
@@ -110,16 +113,18 @@ docker images
 
 docker run --hostname=quickstart.cloudera --privileged=true -t -i -p 8080:50070 -p 8081:50075 -p 8020:8020 -p 9000:9000 -v /Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data:/Storage 4239cd /usr/bin/docker-quickstart
 
-docker exec -it ed sh                                    
+docker exec -it ed sh                                
 ```
 
 HDFS
+
 ```
 hadoop fs -mkdir /Storage_HDFS
 hadoop fs -copyFromLocal Storage/olist_public_dataset.csv /Storage_HDFS/
 ```
 
 HIVE
+
 ```
 set hive.enforce.bucketing = true;
 set hive.exec.dynamic.partition=true;
@@ -148,7 +153,7 @@ order_delivered_customer_date timestamp
 ) 
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ',' 
-STORED AS TEXTFILE LOCATION '/Storage_HDFS';    
+STORED AS TEXTFILE LOCATION '/Storage_HDFS';  
 
 ALTER TABLE amazon_table SET SERDEPROPERTIES ("timestamp.formats"="DD/MM/YY HH:mm");
 
@@ -158,6 +163,7 @@ INSERT OVERWRITE DIRECTORY '/Storage_HDFS_output/cleaned_data.csv' ROW FORMAT DE
 ```
 
 SPARK
+
 ```
 Download and install any IDE such as PyCharm community edition or Visual Studio Code 
 Create a folder where you will like to store the project files
