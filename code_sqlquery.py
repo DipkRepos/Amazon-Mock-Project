@@ -48,7 +48,7 @@ total_sales="select order_purchase_year as year,order_purchase_date as date,\
     SUM(order_items_qty*(order_products_value+order_freight_value)) as Total_sale\
     from ecommerce group by order_purchase_year,order_purchase_date\
     order by order_purchase_year,order_purchase_date"
-# spark.sql(total_sales).show(10,vertical=False)
+spark.sql(total_sales).show(10,vertical=False)
 
 #quey 2, Total sales in each city
 total_sales_city_wise="select customer_city as city,order_purchase_year as year,order_purchase_date as date,\
@@ -200,3 +200,6 @@ total_freight_charges_city_wise="select customer_city as city,order_purchase_yea
     from ecommerce group by customer_city,order_purchase_year,order_purchase_week \
     order by order_purchase_year,order_purchase_week"
 # spark.sql(total_freight_charges_city_wise).show(10,vertical=True)
+
+#exporting spark dataframe to json format
+# csv_df.coalesce(1).write.format('json').save('/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/output.json')
