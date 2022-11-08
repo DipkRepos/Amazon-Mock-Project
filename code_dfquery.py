@@ -74,7 +74,7 @@ total_orders_city_wise=csv_df.groupBy("customer_city","order_purchase_year","ord
     .agg(count("order_items_qty")\
     .alias("Total_orders"))\
     .orderBy("customer_city","order_purchase_year","order_purchase_date")
-# total_orders_city_wise.show(5)
+# total_orders_city_wise.show(5, vertical= True)
 
 #Query 3, Total no of order state wise
 total_orders_state_wise=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_date")\
