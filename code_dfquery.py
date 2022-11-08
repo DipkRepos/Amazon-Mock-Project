@@ -26,10 +26,10 @@ csv_df = csv_df.withColumn('order_purchase_timestamp', csv_df['order_purchase_ti
 csv_df = csv_df.withColumn('order_aproved_at', csv_df['order_aproved_at'].cast('timestamp'))
 csv_df = csv_df.withColumn('order_delivered_customer_date', csv_df['order_delivered_customer_date'].cast('timestamp'))
 
-UDF_year = udf(lambda ts: ts.isocalendar()[0])
-UDF_week = udf(lambda ts: ts.isocalendar()[1])
-UDF_weekday = udf(lambda ts: ts.isocalendar()[2])
-UDF_date = udf(lambda ts: ts.date().isoformat())
+UDF_year = udf(lambda x: x.isocalendar()[0])
+UDF_week = udf(lambda x: x.isocalendar()[1])
+UDF_weekday = udf(lambda x: x.isocalendar()[2])
+UDF_date = udf(lambda x: x.date().isoformat())
 
 csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
@@ -38,14 +38,14 @@ csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_t
 
 # csv_df.show(2,vertical=True)
 
-csv_df.createOrReplaceTempView("ecommerce")
+# csv_df.createOrReplaceTempView("ecommerce")
 
 
 total_sales = csv_df.groupBy("order_purchase_year","order_purchase_date")\
     .agg(sum(csv_df.order_items_qty * (csv_df.order_products_value + csv_df.order_freight_value))\
     .alias("Total_sales"))\
     .orderBy("order_purchase_year","order_purchase_date")    
-# total_sales.show(10,vertical=False)
+total_sales.show(10,vertical=False)
 
 # quey 2, Total sales in each city
 total_sales_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_date")\
@@ -99,14 +99,14 @@ avg_freight_charges_per_order=csv_df.groupBy("order_purchase_year","order_purcha
 
 #Query 6, AVG time taken to approve the order
 avg_time_to_approve=csv_df.groupBy("order_purchase_year","order_purchase_date")\
-    .agg(avg((unix_timestamp(csv_df.order_aproved_at)-unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
+    .agg(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
     .alias("avg_time_to_approve_in_hour"))\
     .orderBy("order_purchase_year","order_purchase_date")
 # avg_time_to_approve.show(5)
 
 #Query 7, AVG time taken to deliver the order
 avg_order_delivery_time=csv_df.groupBy("order_purchase_year","order_purchase_date")\
-    .agg(avg((unix_timestamp(csv_df.order_delivered_customer_date)-unix_timestamp(csv_df.order_purchase_timestamp))/24*3600)\
+    .agg(avg((unix_timestamp(csv_df.order_delivered_customer_date) - unix_timestamp(csv_df.order_purchase_timestamp))/24*3600)\
     .alias("avg_order_delivery_time_in_day"))\
     .orderBy("order_purchase_year","order_purchase_date")
 # avg_order_delivery_time.show(5)
@@ -114,7 +114,7 @@ avg_order_delivery_time=csv_df.groupBy("order_purchase_year","order_purchase_dat
 #Weekly insight
 #quey 1, Total sales
 total_sales=csv_df.groupBy("order_purchase_year","order_purchase_week")\
-    .agg(sum(csv_df.order_items_qty*csv_df.order_products_value+csv_df.order_freight_value)\
+    .agg(sum(csv_df.order_items_qty * csv_df.order_products_value + csv_df.order_freight_value)\
     .alias("Total_sales"))\
     .orderBy("order_purchase_year","order_purchase_week")
 # total_sales.show(5)
@@ -172,7 +172,7 @@ avg_freight_charges_per_order=csv_df.groupBy("order_purchase_year","order_purcha
 
 #Query 6, AVG time taken to approve the order
 avg_time_to_approve=csv_df.groupBy("order_purchase_year","order_purchase_week")\
-    .agg(avg((unix_timestamp(csv_df.order_aproved_at)-unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
+    .agg(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
     .alias("avg_time_to_approve_in_hour"))\
     .orderBy("order_purchase_year","order_purchase_week")
 # avg_time_to_approve.show(5)
