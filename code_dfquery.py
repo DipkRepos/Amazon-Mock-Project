@@ -3,10 +3,11 @@ from pyspark.sql.functions import udf,col
 from pyspark.sql.functions import udf,col,sum,avg,count,unix_timestamp
 import pandas as pd
 import boto3
+from io import StringIO
 
 spark = SparkSession.builder.appName ("Analytics project session")\
-    .config("spark.mongodb.input.uri", "mongodb://127.0.0.1/mock-project.dataCollection") \
-    .config("spark.mongodb.output.uri", "mongodb://127.0.0.1/mock-project.dataCollection") \
+    .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
+    .config("spark.mongodb.output.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
     .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
     .getOrCreate()
 
@@ -234,21 +235,20 @@ df_names = { 'total_sales_daily':total_sales_daily,
 # print(len(df_names))
 
 # for key,value in df_names.items():
-#     value.write.mode('overwrite').csv(path = "/Users/ymnikhil/Important_Documents/Amazon-Mock-Project/Amazon-Mock-Project/output/" + key, header= True)
+#     value.write.mode('overwrite').csv(path = "<csv path url>" + key, header= True)
 
 
-from io import StringIO
-def upload_s3(df,i):
-    s3 = boto3.client("s3",aws_access_key_id="AKIA6G2WGAQBAJS6HTPX",aws_secret_access_key="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")
-    csv_buf = StringIO()
-    df.to_csv(csv_buf, header=True, index=False)
-    csv_buf.seek(0)   
-    s3.put_object(Bucket="rohithya-mockproject", Body=csv_buf.getvalue(), Key='output/'+i)
 
-for key,value in df_names.items():
-    upload_s3(value.toPandas(),str(key)+'.csv')
+# def upload_s3(df,i):
+#     s3 = boto3.client("s3",aws_access_key_id="AKIA6G2WGAQBAJS6HTPX",aws_secret_access_key="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")
+#     csv_buf = StringIO()
+#     df.to_csv(csv_buf, header=True, index=False)
+#     csv_buf.seek(0)   
+#     s3.put_object(Bucket="rohithya-mockproject", Body=csv_buf.getvalue(), Key='output/'+i)
+
+# for key,value in df_names.items():
+#     upload_s3(value.toPandas(),str(key)+'.csv')
 
 
-csv_df.write.format("mongodb").mode("append").option("uri","mongodb://127.0.0.1/mock-project.dataCollection") \
-.save()
+# csv_df.write.format("mongodb").mode("append").option("uri","mongodb://127.0.0.1/mock-project.dataCollection").save()
 
