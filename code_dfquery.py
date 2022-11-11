@@ -40,174 +40,192 @@ csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_t
 
 # csv_df.createOrReplaceTempView("ecommerce")
 
-total_sales = csv_df.groupBy("order_purchase_year","order_purchase_date")\
+#Daily insight
+#Sales
+#Query 1, Total sales
+total_sales_daily= csv_df.groupBy("order_purchase_date")\
     .agg(sum(csv_df.order_items_qty * (csv_df.order_products_value + csv_df.order_freight_value))\
     .alias("Total_sales"))\
-    .orderBy("order_purchase_year","order_purchase_date")    
-total_sales.show(10,vertical=False)
+    .orderBy("order_purchase_date")    
+# total_sales_daily.show(10,vertical=False)
 
-# quey 2, Total sales in each city
-total_sales_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_date")\
+#Query 2, Total sales in each city
+total_sales_city_wise_daily=csv_df.groupBy("customer_city","order_purchase_date")\
     .agg( sum ( csv_df.order_items_qty * csv_df.order_products_value + csv_df.order_freight_value)\
     .alias("Total_sales"))\
-    .orderBy("customer_city","order_purchase_year","order_purchase_date")
-# total_sales_city_wise.show(5)
+    .orderBy("customer_city","order_purchase_date")
+# total_sales_city_wise_daily.show(5)
 
-#quey 3, Total sales in each state
-total_sales_state_wise=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_date")\
+#Query 3, Total sales in each state
+total_sales_state_wise_daily=csv_df.groupBy("customer_state","order_purchase_date")\
     .agg(sum(csv_df.order_items_qty*csv_df.order_products_value+csv_df.order_freight_value)\
     .alias("Total_sales"))\
-    .orderBy("customer_state","order_purchase_year","order_purchase_date")
-# total_sales_state_wise.show(5)
+    .orderBy("customer_state","order_purchase_date")
+# total_sales_state_wise_daily.show(5)
 
 #Orders
 #Query 1, Total no of order
-total_orders=csv_df.groupBy("order_purchase_year","order_purchase_date")\
+total_orders_daily=csv_df.groupBy("order_purchase_date")\
     .agg(count("order_items_qty")\
-    .alias("Total_orderss"))\
-    .orderBy("order_purchase_year","order_purchase_date")
-# total_orders.show(5)
+    .alias("Total_orders"))\
+    .orderBy("order_purchase_date")
+# total_orders_daily.show(5)
 
 #Query 2, Total no of order city wise
-total_orders_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_date")\
+total_orders_city_wise_daily=csv_df.groupBy("customer_city","order_purchase_date")\
     .agg(count("order_items_qty")\
     .alias("Total_orders"))\
-    .orderBy("customer_city","order_purchase_year","order_purchase_date")
-# total_orders_city_wise.show(5, vertical= True)
+    .orderBy("customer_city","order_purchase_date")
+# total_orders_city_wise_daily.show(5, vertical= True)
 
 #Query 3, Total no of order state wise
-total_orders_state_wise = csv_df.groupBy("customer_state","order_purchase_year","order_purchase_date")\
+total_orders_state_wise_daily = csv_df.groupBy("customer_state","order_purchase_date")\
     .agg(count("order_items_qty")\
     .alias("Total_orders"))\
-    .orderBy("customer_state","order_purchase_year","order_purchase_date")
-# total_orders_state_wise.show(5)
+    .orderBy("customer_state","order_purchase_date")
+# total_orders_state_wise_daily.show(5)
 
 #Query 4, AVG review_score per order
-avg_score_per_order=csv_df.groupBy("order_purchase_year","order_purchase_date")\
+avg_score_per_order_daily=csv_df.groupBy("order_purchase_date")\
     .agg(avg("review_score")\
     .alias("AVG_review_score"))\
-    .orderBy("order_purchase_year","order_purchase_date")
-# avg_score_per_order.show(5)
+    .orderBy("order_purchase_date")
+# avg_score_per_order_daily.show(5)
 
 #Query 5, AVG freight charges per order
-avg_freight_charges_per_order=csv_df.groupBy("order_purchase_year","order_purchase_date")\
+avg_freight_charges_per_order_daily=csv_df.groupBy("order_purchase_date")\
     .agg(avg("order_freight_value")\
     .alias("Aavg_freight_charges_per_order"))\
-    .orderBy("order_purchase_year","order_purchase_date")
-# avg_freight_charges_per_order.show(5)
+    .orderBy("order_purchase_date")
+# avg_freight_charges_per_order_daily.show(5)
 
 #Query 6, AVG time taken to approve the order
-avg_time_to_approve=csv_df.groupBy("order_purchase_year","order_purchase_date")\
+avg_time_to_approve_daily=csv_df.groupBy("order_purchase_date")\
     .agg(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
     .alias("avg_time_to_approve_in_hour"))\
-    .orderBy("order_purchase_year","order_purchase_date")
-# avg_time_to_approve.show(5)
+    .orderBy("order_purchase_date")
+# avg_time_to_approve_daily.show(5)
 
 #Query 7, AVG time taken to deliver the order
-avg_order_delivery_time=csv_df.groupBy("order_purchase_year","order_purchase_date")\
+avg_order_delivery_time_daily=csv_df.groupBy("order_purchase_date")\
     .agg(avg((unix_timestamp(csv_df.order_delivered_customer_date) - unix_timestamp(csv_df.order_purchase_timestamp))/24*3600)\
     .alias("avg_order_delivery_time_in_day"))\
-    .orderBy("order_purchase_year","order_purchase_date")
-# avg_order_delivery_time.show(5)
+    .orderBy("order_purchase_date")
+# avg_order_delivery_time_daily.show(5)
 
-#Weekly insight
-#quey 1, Total sales
-total_sales=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+#Weekly insight for sales
+#Sales
+#Query 1, Total sales
+total_sales_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(sum(csv_df.order_items_qty * csv_df.order_products_value + csv_df.order_freight_value)\
     .alias("Total_sales"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# total_sales.show(5)
+# total_sales_weekly.show(5)
 
-# quey 2, Total sales in each city
-total_sales_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
+# Query 2, Total sales in each city
+total_sales_city_wise_weekly=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
     .agg(sum(csv_df.order_items_qty * csv_df.order_products_value + csv_df.order_freight_value)\
     .alias("Total_sales"))\
     .orderBy("customer_city","order_purchase_year","order_purchase_week")
-# total_sales_city_wise.show(5)
+# total_sales_city_wise_weekly.show(5)
 
-#quey 3, Total sales in each state
-total_sales_state_wise=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_week")\
+#Query 3, Total sales in each state
+total_sales_state_wise_weekly=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_week")\
     .agg(sum(csv_df.order_items_qty * csv_df.order_products_value + csv_df.order_freight_value)\
     .alias("Total_sales"))\
     .orderBy("customer_state","order_purchase_year","order_purchase_week")
-# total_sales_state_wise.show(5)
+# total_sales_state_wise_weekly.show(5)
 
 #WEEKLY Insight for orders
 #Orders
 #Query 1, Total no of order
-total_orders=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+total_orders_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(count("order_items_qty")\
     .alias("Total_orderss"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# total_orders.show(5)
+# total_orders_weekly.show(5)
 
 #Query 2, Total no of order city wise
-total_orders_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
+total_orders_city_wise_weekly=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
     .agg(count("order_items_qty")\
     .alias("Total_orders"))\
     .orderBy("customer_city","order_purchase_year","order_purchase_week")
-# total_orders_city_wise.show(5)
+# total_orders_city_wise_weekly.show(5)
 
 #Query 3, Total no of order state wise
-total_orders_state_wise=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_week")\
+total_orders_state_wise_weekly=csv_df.groupBy("customer_state","order_purchase_year","order_purchase_week")\
     .agg(count("order_items_qty")\
     .alias("Total_orders"))\
     .orderBy("customer_state","order_purchase_year","order_purchase_week")
-# total_orders_state_wise.show(5)
+# total_orders_state_wise_weekly.show(5)
 
 #Query 4, AVG review_score per order
-avg_score_per_order=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+avg_score_per_order_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(avg("review_score")\
     .alias("AVG_review_score"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# avg_score_per_order.show(5)
+# avg_score_per_order_weekly.show(5)
 
 #Query 5, AVG freight charges per order
-avg_freight_charges_per_order=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+avg_freight_charges_per_order_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(avg("order_freight_value")\
     .alias("Aavg_freight_charges_per_order"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# avg_freight_charges_per_order.show(5)
+# avg_freight_charges_per_order_weekly.show(5)
 
 #Query 6, AVG time taken to approve the order
-avg_time_to_approve=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+avg_time_to_approve_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
     .alias("avg_time_to_approve_in_hour"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# avg_time_to_approve.show(5)
+# avg_time_to_approve_weekly.show(5)
 
 #Query 7, AVG time taken to deliver the order
-avg_order_delivery_time=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+avg_order_delivery_time_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(avg((unix_timestamp(csv_df.order_delivered_customer_date) - unix_timestamp(csv_df.order_purchase_timestamp))/24*3600)\
     .alias("avg_order_delivery_time_in_day"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# avg_order_delivery_time.show(5, truncate= False)
+# avg_order_delivery_time_weekly.show(5, truncate= False)
 
 #Query c, Total freight charges
-total_freight_charges=csv_df.groupBy("order_purchase_year","order_purchase_week")\
+total_freight_charges_weekly=csv_df.groupBy("order_purchase_year","order_purchase_week")\
     .agg(sum(csv_df.order_freight_value)\
     .alias("total_freight_charges"))\
     .orderBy("order_purchase_year","order_purchase_week")
-# total_freight_charges.show(5)
+# total_freight_charges_weekly.show(5)
 
 #Query d, Total freight charges city wise
-total_freight_charges_city_wise=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
+total_freight_charges_city_wise_weekly=csv_df.groupBy("customer_city","order_purchase_year","order_purchase_week")\
     .agg(sum(csv_df.order_freight_value)\
     .alias("total_freight_charges"))\
     .orderBy("customer_city","order_purchase_year","order_purchase_week")
-# total_freight_charges_city_wise.show(5)
+total_freight_charges_city_wise_weekly.show(5)
 
+df_names = { 'total_sales_daily':total_sales_daily, 
+             'total_sales_city_wise_daily':total_sales_city_wise_daily, 
+             'total_sales_state_wise_daily':total_sales_state_wise_daily, 
+             'total_orders_daily':total_orders_daily, 
+             'total_orders_city_wise_daily':total_orders_city_wise_daily, 
+             'total_orders_state_wise_daily':total_orders_state_wise_daily, 
+             'avg_score_per_order_daily':avg_score_per_order_daily, 
+             'avg_freight_charges_per_order_daily':avg_freight_charges_per_order_daily, 
+             'avg_time_to_approve_daily':avg_time_to_approve_daily, 
+             'avg_order_delivery_time_daily':avg_order_delivery_time_daily,
+             'total_sales_weekly':total_sales_weekly, 
+             'total_sales_city_wise_weekly':total_sales_city_wise_weekly, 
+             'total_sales_state_wise_weekly':total_sales_state_wise_weekly, 
+             'total_orders_weekly':total_orders_weekly, 
+             'total_orders_city_wise_weekly':total_orders_city_wise_weekly, 
+             'total_orders_state_wise_weekly':total_orders_state_wise_weekly, 
+             'avg_score_per_order_weekly':avg_score_per_order_weekly, 
+             'avg_freight_charges_per_order_weekly':avg_freight_charges_per_order_weekly,
+             'avg_time_to_approve_weekly':avg_time_to_approve_weekly, 
+             'avg_order_delivery_time_weekly':avg_order_delivery_time_weekly, 
+             'total_freight_charges_weekly':total_freight_charges_weekly, 
+             'total_freight_charges_city_wise_weekly':total_freight_charges_city_wise_weekly
+              }
 
+# print(len(df_names))
 
-#  Exporting data from Queries to NO SQLDB
-
-# csv_df.write\
-#     .format('com.mongodb.spark.sql.DefaultSource')\
-#     .mode("append")\
-#     .option( "uri", "mongodb+srv://user:password@cluster1.s5tuva0.mongodb.net/my_database.my_collection?retryWrites=true&w=majority") \
-#     .save()
-
-
-# write files (spark df) to amazon s3
-
-# 
+# for key,value in df_names.items():
+#     value.write.mode('overwrite').csv(path = "/Users/ymnikhil/Important_Documents/Amazon-Mock-Project/Amazon-Mock-Project/output/" + key, header= True)
