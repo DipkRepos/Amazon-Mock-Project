@@ -182,3 +182,15 @@ I would better suggest using pycharm because it will create a virtual environmen
 [Results of city-wise queries](https://docs.google.com/document/d/1cAs5sppIqbSO3OZIO7Z-aUHW9mwMmtCMGS4FbYxkyhA/edit#)
 
 [Results of state-wise queries](https://docs.google.com/document/d/1EkTXpiRELX4A6mU1Sc6Y43wPwDEEx4MhTS1Qgt2pEKc/edit)
+
+## Exporting data
+
+S3 
+- [Refer Link To see S3 document](https://github.com/aniket-sigmoid/Amazon-Mock-Project/blob/main/Exporting%20df%20to%20S3.pdf)
+
+HDFS
+- hadoop fs -mkdir /mockProject
+- hadoop fs -copyFromLocal Storage/output/* /mockProject
+
+NOSQL DB (MONGO DB)
+- [Refer this Code file](https://github.com/aniket-sigmoid/Amazon-Mock-Project/blob/main/mongodb_export.ipynb)
