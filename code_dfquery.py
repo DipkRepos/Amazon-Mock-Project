@@ -234,11 +234,12 @@ df_names = { 'total_sales_daily':total_sales_daily,
 
 # print(len(df_names))
 
+## exporting query data to local storage in CSV format
 # for key,value in df_names.items():
 #     value.write.mode('overwrite').csv(path = "<csv path url>" + key, header= True)
 
 
-
+## exporting query data to S3 in CSV format
 # def upload_s3(df,i):
 #     s3 = boto3.client("s3",aws_access_key_id="AKIA6G2WGAQBAJS6HTPX",aws_secret_access_key="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")
 #     csv_buf = StringIO()
@@ -250,5 +251,10 @@ df_names = { 'total_sales_daily':total_sales_daily,
 #     upload_s3(value.toPandas(),str(key)+'.csv')
 
 
-# csv_df.write.format("mongodb").mode("append").option("uri","mongodb://127.0.0.1/mock-project.dataCollection").save()
 
+## Exporting query data to mongo-DB in json format
+# for key,value in df_names.items():
+#     value.write\
+#         .format('com.mongodb.spark.sql.DefaultSource')\
+#         .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
+#         .save()
