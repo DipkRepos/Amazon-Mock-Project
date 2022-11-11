@@ -40,7 +40,6 @@ csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_t
 
 # csv_df.createOrReplaceTempView("ecommerce")
 
-
 total_sales = csv_df.groupBy("order_purchase_year","order_purchase_date")\
     .agg(sum(csv_df.order_items_qty * (csv_df.order_products_value + csv_df.order_freight_value))\
     .alias("Total_sales"))\
@@ -211,4 +210,4 @@ total_freight_charges_city_wise=csv_df.groupBy("customer_city","order_purchase_y
 
 # write files (spark df) to amazon s3
 
-# csv_df.write.json("s3a://bucket-name/amazon-mock-project",mode="overwrite")
+# 
