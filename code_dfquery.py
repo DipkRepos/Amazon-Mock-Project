@@ -5,25 +5,37 @@ import boto3
 from io import StringIO
 from utilities.AWS_credentials import SECRET_ACCESS_KEY, ACCESS_KEY_ID 
 
-spark = SparkSession.builder.appName ("Analytics project session")\
-    .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
-    .config("spark.mongodb.output.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
-    .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
-    .getOrCreate()
 
-#this method to put data in spark is giving errors (all columns inferred as string, though inferschema is true)
-header = spark.read \
-  .format("csv") \
-  .option("header", "true") \
-  .load("/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv/headers.csv") 
+try :
+    spark = SparkSession.builder.appName ("Analytics project session")\
+        .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
+        .config("spark.mongodb.output.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
+        .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
+        .getOrCreate()
+except Exception as e:
+    print (" Exeception occured: " + str(e))
 
+try :
+    header = spark.read \
+    .format("csv") \
+    .option("header", "true") \
+    .load("/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv/headers.csv") 
+except Exception as e:
+    print (" Exeception occured: " + str(e))
+
+## below code reads CSV file which has headers included
 # csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True, inferSchema= True)
-csv_df = spark.read \
-  .format("csv") \
-  .option("header", "true") \
-  .option("inferSchema","true") \
-  .load('/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv') \
-  .toDF(*header.columns)
+
+##following is the code to import exported CSV with seperate hearder file.
+try:
+    csv_df = spark.read \
+    .format("csv") \
+    .option("header", "true") \
+    .option("inferSchema","true") \
+    .load('/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv') \
+    .toDF(*header.columns)
+except Exception as e:
+    print (" Exeception occured: " + str(e))    
   
 # csv_df.printSchema()
 # csv_df.show(10)
@@ -234,10 +246,13 @@ df_names = { 'total_sales_daily':total_sales_daily,
 
 # print(len(df_names))
 
-## exporting query data to local storage in CSV format
+# exporting query data to local storage in CSV format
+# try:
+#     for key,value in df_names.items():
+#         value.write.mode('overwrite').csv(path = "<csv path url>" + key, header= True)
+# except Exception as e:
+#     print (" Exception occured: " + str(e))
 
-# for key,value in df_names.items():
-#     value.write.mode('overwrite').csv(path = "<csv path url>" + key, header= True)
 
 
 ## exporting query data to S3 in CSV format
@@ -249,15 +264,20 @@ df_names = { 'total_sales_daily':total_sales_daily,
 #     csv_buf.seek(0)   
 #     s3.put_object(Bucket="rohithya-mockproject", Body=csv_buf.getvalue(), Key='output/'+i)
 
-# for key,value in df_names.items():
-#     upload_s3(value.toPandas(),str(key)+'.csv')
-
+# try:
+#     for key,value in df_names.items():
+#         upload_s3(value.toPandas(),str(key)+'.csv')
+# except Exception as e:
+#     print (" Exception occured: " + str(e))
 
 
 ## Exporting query data to mongo-DB in json format
 
-# for key,value in df_names.items():
-#     value.write\
-#         .format('com.mongodb.spark.sql.DefaultSource')\
-#         .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
-#         .save()
+# try:
+#     for key,value in df_names.items():
+#         value.write\
+#             .format('com.mongodb.spark.sql.DefaultSource')\
+#             .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
+#             .save()
+# except Exception as e:
+#     print (" Exception occured: " + str(e))            
