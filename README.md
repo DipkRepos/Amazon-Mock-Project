@@ -102,7 +102,7 @@ copy into amazon_data_table
 select * from amazon_data_table;
 ```
 
-# Setting up local environment ( Docker, Hive, HDFS, SPARK )
+# Setting up local environment (Docker, Hive, HDFS, SPARK)
 
 DOCKER
 
@@ -189,8 +189,10 @@ S3
 - [Refer Link To see S3 document](https://github.com/aniket-sigmoid/Amazon-Mock-Project/blob/main/Exporting%20df%20to%20S3.pdf)
 
 HDFS
-- hadoop fs -mkdir /mockProject
-- hadoop fs -copyFromLocal Storage/output/* /mockProject
+- hadoop fs -mkdir /Storage_HDFS_output/Output_CSVs/
+- hadoop fs -copyFromLocal /Storage/Output_CSVs/* /Storage_HDFS_output/Output_CSVs/
 
 NOSQL DB (MONGO DB)
 - [Refer this Code file](https://github.com/aniket-sigmoid/Amazon-Mock-Project/blob/main/mongodb_export.ipynb)
+
+
