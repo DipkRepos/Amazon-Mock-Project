@@ -254,7 +254,6 @@ df_names = { 'total_sales_daily':total_sales_daily,
 #     print (" Exception occured: " + str(e))
 
 
-
 ## exporting query data to S3 in CSV format
 
 # def upload_s3(df,i):
