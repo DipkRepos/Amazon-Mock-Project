@@ -5,7 +5,7 @@ import boto3
 from io import StringIO
 from utilities.AWS_credentials import SECRET_ACCESS_KEY, ACCESS_KEY_ID 
 
-
+# creating a spark session
 try :
     spark = SparkSession.builder.appName ("Analytics project session")\
         .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
@@ -15,6 +15,8 @@ try :
 except Exception as e:
     print (" Exeception occured: " + str(e))
 
+
+# Reading header file seperately as exported CSV does not have header
 try :
     header = spark.read \
     .format("csv") \
@@ -23,8 +25,6 @@ try :
 except Exception as e:
     print (" Exeception occured: " + str(e))
 
-## below code reads CSV file which has headers included
-# csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True, inferSchema= True)
 
 ##following is the code to import exported CSV with seperate hearder file.
 try:
@@ -36,27 +36,33 @@ try:
     .toDF(*header.columns)
 except Exception as e:
     print (" Exeception occured: " + str(e))    
-  
+
+## below code reads CSV file which has headers included
+# csv_df = spark.read.csv ('final_data.csv',sep = ',', header = True, inferSchema= True)
+
 # csv_df.printSchema()
 # csv_df.show(10)
 
-#changing datatype of dataset to timestamp from string
+#changing datatype of dataset date columns to timestamp from string
 csv_df = csv_df.withColumn('order_purchase_timestamp', csv_df['order_purchase_timestamp'].cast('timestamp'))
 csv_df = csv_df.withColumn('order_aproved_at', csv_df['order_aproved_at'].cast('timestamp'))
 csv_df = csv_df.withColumn('order_delivered_customer_date', csv_df['order_delivered_customer_date'].cast('timestamp'))
+
+# declaring some functions to export date,year,weekday,week from the timestamp so that we can add seperate columns on it.
+#this will help in writing smaller and easier queries.
 
 UDF_year = udf(lambda x: x.isocalendar()[0])
 UDF_week = udf(lambda x: x.isocalendar()[1])
 UDF_weekday = udf(lambda x: x.isocalendar()[2])
 UDF_date = udf(lambda x: x.date().isoformat())
 
+# making some extra columns based on the data from above UDFs
 csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_weekday", UDF_weekday(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_timestamp")).cast('date'))
 
 # csv_df.show(2,vertical=True)
-
 # csv_df.createOrReplaceTempView("ecommerce")
 
 #Daily insight
@@ -220,6 +226,7 @@ total_freight_charges_city_wise_weekly=csv_df.groupBy("customer_city","order_pur
     .orderBy("customer_city","order_purchase_year","order_purchase_week")
 total_freight_charges_city_wise_weekly.show(5)
 
+# making dictionary for the queries output where values are spark-dataframes.
 df_names = { 'total_sales_daily':total_sales_daily, 
              'total_sales_city_wise_daily':total_sales_city_wise_daily, 
              'total_sales_state_wise_daily':total_sales_state_wise_daily, 
