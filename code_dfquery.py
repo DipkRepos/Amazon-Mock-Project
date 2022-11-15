@@ -251,20 +251,20 @@ df_names = { 'total_sales_daily':total_sales_daily,
              'total_freight_charges_city_wise_weekly':total_freight_charges_city_wise_weekly
               }
 
-# print(len(df_names))
+print(len(df_names))
 
-# exporting query data to local storage in CSV format
-# try:
-#     for key,value in df_names.items():
-#         value.write.mode('overwrite').csv(path = "<csv path url>" + key, header= True)
-# except Exception as e:
-#     print (" Exception occured: " + str(e))
+#exporting query data to local storage in CSV format
+try:
+    for key,value in df_names.items():
+        value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
+except Exception as e:
+    print (" Exception occured: " + str(e))
 
 
 ## exporting query data to S3 in CSV format
 
 # def upload_s3(df,i):
-#     s3 = boto3.client("s3",aws_access_key_id = ACCEhiveS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
+#     s3 = boto3.client("s3",aws_access_key_id = ACCESS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
 #     csv_buf = StringIO()
 #     df.to_csv(csv_buf, header=True, index=False)
 #     csv_buf.seek(0)   
@@ -279,11 +279,11 @@ df_names = { 'total_sales_daily':total_sales_daily,
 
 # Exporting query data to mongo-DB in json format
 
-try:
-    for key,value in df_names.items():
-        value.write\
-            .format('com.mongodb.spark.sql.DefaultSource')\
-            .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
-            .save()
-except Exception as e:
-    print (" Exception occured: " + str(e))            
+# try:
+#     for key,value in df_names.items():
+#         value.write\
+#             .format('com.mongodb.spark.sql.DefaultSource')\
+#             .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
+#             .save()
+# except Exception as e:
+#     print (" Exception occured: " + str(e))            
