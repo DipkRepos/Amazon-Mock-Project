@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf,col,sum,avg,count,unix_timestamp
+from pyspark.sql.functions import udf,col,sum,avg,count,unix_timestamp,round
 import pandas as pd
 import boto3
 from io import StringIO
@@ -69,7 +69,7 @@ csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_t
 #Sales
 #Query 1, Total sales
 total_sales_daily= csv_df.groupBy("order_purchase_date")\
-    .agg(sum(csv_df.order_items_qty * (csv_df.order_products_value + csv_df.order_freight_value))\
+    .agg(round(sum(csv_df.order_items_qty * (csv_df.order_products_value + csv_df.order_freight_value)),2)\
     .alias("Total_sales"))\
     .orderBy("order_purchase_date")    
 # total_sales_daily.show(10,vertical=False)
@@ -264,7 +264,7 @@ df_names = { 'total_sales_daily':total_sales_daily,
 ## exporting query data to S3 in CSV format
 
 # def upload_s3(df,i):
-#     s3 = boto3.client("s3",aws_access_key_id = ACCESS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
+#     s3 = boto3.client("s3",aws_access_key_id = ACCEhiveS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
 #     csv_buf = StringIO()
 #     df.to_csv(csv_buf, header=True, index=False)
 #     csv_buf.seek(0)   
@@ -277,13 +277,13 @@ df_names = { 'total_sales_daily':total_sales_daily,
 #     print (" Exception occured: " + str(e))
 
 
-## Exporting query data to mongo-DB in json format
+# Exporting query data to mongo-DB in json format
 
-# try:
-#     for key,value in df_names.items():
-#         value.write\
-#             .format('com.mongodb.spark.sql.DefaultSource')\
-#             .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
-#             .save()
-# except Exception as e:
-#     print (" Exception occured: " + str(e))            
+try:
+    for key,value in df_names.items():
+        value.write\
+            .format('com.mongodb.spark.sql.DefaultSource')\
+            .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
+            .save()
+except Exception as e:
+    print (" Exception occured: " + str(e))            

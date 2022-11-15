@@ -155,7 +155,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ',' 
 STORED AS TEXTFILE LOCATION '/Storage_HDFS';  
 
-ALTER TABLE amazon_table SET SERDEPROPERTIES ("timestamp.formats"="DD/MM/YY HH:mm");
+ALTER TABLE amazon_table SET SERDEPROPERTIES ("timestamp.formats"="dd/MM/YY HH:mm");
 
 INSERT OVERWRITE DIRECTORY '/Storage_HDFS_output/cleaned_data.csv' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM amazon_table;
 
