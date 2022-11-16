@@ -4,8 +4,10 @@ import pandas as pd
 import boto3
 from io import StringIO
 from utilities.AWS_credentials import SECRET_ACCESS_KEY, ACCESS_KEY_ID 
+# boto3 connects AWS services with python application
+#stringIO provides pythons main facility to provide input facilities
 
-# creating a spark session
+# creating a spark session with mongoDB connectors for data export at the end
 try :
     spark = SparkSession.builder.appName ("Analytics project session")\
         .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
@@ -49,14 +51,14 @@ csv_df = csv_df.withColumn('order_aproved_at', csv_df['order_aproved_at'].cast('
 csv_df = csv_df.withColumn('order_delivered_customer_date', csv_df['order_delivered_customer_date'].cast('timestamp'))
 
 # declaring some functions to export date,year,weekday,week from the timestamp so that we can add seperate columns on it.
-#this will help in writing smaller and easier queries.
+# this will help in writing smaller and easier queries.
 
 UDF_year = udf(lambda x: x.isocalendar()[0])
 UDF_week = udf(lambda x: x.isocalendar()[1])
 UDF_weekday = udf(lambda x: x.isocalendar()[2])
 UDF_date = udf(lambda x: x.date().isoformat())
 
-# making some extra columns based on the data from above UDFs
+# adding some extra columns based on the data from above UDFs
 csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
 csv_df = csv_df.withColumn("order_purchase_weekday", UDF_weekday(col("order_purchase_timestamp")))
@@ -253,12 +255,12 @@ df_names = { 'total_sales_daily':total_sales_daily,
 
 print(len(df_names))
 
-#exporting query data to local storage in CSV format
-try:
-    for key,value in df_names.items():
-        value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
-except Exception as e:
-    print (" Exception occured: " + str(e))
+# #exporting query data to local storage in CSV format
+# try:
+#     for key,value in df_names.items():
+#         value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
+# except Exception as e:
+#     print (" Exception occured: " + str(e))
 
 
 ## exporting query data to S3 in CSV format
