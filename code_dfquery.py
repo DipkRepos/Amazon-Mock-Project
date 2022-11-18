@@ -216,7 +216,7 @@ avg_time_to_approve_weekly=csv_df.filter((csv_df.order_aproved_at.isNotNull()) &
           (csv_df.order_purchase_timestamp.isNotNull()) &\
           (unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp)>=0))\
     .groupBy("order_purchase_year","order_purchase_week")\
-    .agg(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600)\
+    .agg(round(avg((unix_timestamp(csv_df.order_aproved_at) - unix_timestamp(csv_df.order_purchase_timestamp))/3600),2)\
     .alias("avg_time_to_approve_in_hour"))\
     .orderBy("order_purchase_year","order_purchase_week")
 # avg_time_to_approve_weekly.show(5)
@@ -226,7 +226,7 @@ avg_order_delivery_time_weekly=csv_df.filter((csv_df.order_delivered_customer_da
           (csv_df.order_purchase_timestamp.isNotNull()) &\
           (unix_timestamp(csv_df.order_delivered_customer_date)-unix_timestamp(csv_df.order_purchase_timestamp)>=0))\
     .groupBy("order_purchase_year","order_purchase_week")\
-    .agg(avg((unix_timestamp(csv_df.order_delivered_customer_date) - unix_timestamp(csv_df.order_purchase_timestamp))/24*3600)\
+    .agg(round(avg((unix_timestamp(csv_df.order_delivered_customer_date) - unix_timestamp(csv_df.order_purchase_timestamp))/(24*3600)),2)\
     .alias("avg_order_delivery_time_in_day"))\
     .orderBy("order_purchase_year","order_purchase_week")
 # avg_order_delivery_time_weekly.show(5, truncate= False)
