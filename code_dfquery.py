@@ -272,37 +272,37 @@ df_names = { 'total_sales_daily':total_sales_daily,
 
 print(len(df_names))
 
-# #exporting query data to local storage in CSV format
-# try:
-#     for key,value in df_names.items():
-#         value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
-# except Exception as e:
-#     print (" Exception occured: " + str(e))
+#exporting query data to local storage in CSV format
+try:
+    for key,value in df_names.items():
+        value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
+except Exception as e:
+    print (" Exception occured: " + str(e))
 
 
-## exporting query data to S3 in CSV format
+# exporting query data to S3 in CSV format
 
-# def upload_s3(df,i):
-#     s3 = boto3.client("s3",aws_access_key_id = ACCESS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
-#     csv_buf = StringIO()
-#     df.to_csv(csv_buf, header=True, index=False)
-#     csv_buf.seek(0)   
-#     s3.put_object(Bucket="rohithya-mockproject", Body=csv_buf.getvalue(), Key='output/'+i)
+def upload_s3(df,i):
+    s3 = boto3.client("s3",aws_access_key_id = ACCESS_KEY_ID ,aws_secret_access_key = SECRET_ACCESS_KEY)
+    csv_buf = StringIO()
+    df.to_csv(csv_buf, header=True, index=False)
+    csv_buf.seek(0)   
+    s3.put_object(Bucket="rohithya-mockproject", Body=csv_buf.getvalue(), Key='output/'+i)
 
-# try:
-#     for key,value in df_names.items():
-#         upload_s3(value.toPandas(),str(key)+'.csv')
-# except Exception as e:
-#     print (" Exception occured: " + str(e))
+try:
+    for key,value in df_names.items():
+        upload_s3(value.toPandas(),str(key)+'.csv')
+except Exception as e:
+    print (" Exception occured: " + str(e))
 
 
 # Exporting query data to mongo-DB in json format
 
-# try:
-#     for key,value in df_names.items():
-#         value.write\
-#             .format('com.mongodb.spark.sql.DefaultSource')\
-#             .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
-#             .save()
-# except Exception as e:
-#     print (" Exception occured: " + str(e))            
+try:
+    for key,value in df_names.items():
+        value.write\
+            .format('com.mongodb.spark.sql.DefaultSource')\
+            .option('uri', 'mongodb://127.0.0.1:27017/mock-project-amazon.' + key) \
+            .save()
+except Exception as e:
+    print (" Exception occured: " + str(e))            
