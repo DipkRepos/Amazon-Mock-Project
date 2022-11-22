@@ -4,38 +4,34 @@ import pandas as pd
 import boto3
 from io import StringIO
 from utilities.AWS_credentials import SECRET_ACCESS_KEY, ACCESS_KEY_ID 
+import sys
 # boto3 connects AWS services with python application
 #stringIO provides pythons main facility to provide input facilities
 
 # creating a spark session with mongoDB connectors for data export at the end
-try :
-    spark = SparkSession.builder.appName ("Analytics project session")\
-        .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
-        .config("spark.mongodb.output.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
-        .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
-        .getOrCreate()
-except Exception as e:
-    print (" Exeception occured: " + str(e))
+
+spark = SparkSession.builder.appName ("Analytics project session")\
+    .config("spark.mongodb.input.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
+    .config("spark.mongodb.output.uri", "mongodb://127.0.0.1:27017/mock-project.dataCollection") \
+    .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.12:3.0.1') \
+    .getOrCreate()
 
 
 # Reading header file seperately as exported CSV does not have header
-try :
-    header = spark.read \
-    .format("csv") \
-    .option("header", "true") \
-    .load("/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv/headers.csv") 
-except Exception as e:
-    print (" Exeception occured: " + str(e))
+header = spark.read \
+.format("csv") \
+.option("header", "true") \
+.load(sys.argv[1] + '/Input_data/headers.csv') 
 
 
 ##following is the code to import exported CSV with seperate hearder file.
-try:
-    csv_df = spark.read \
-    .format("csv") \
-    .option("header", "true") \
-    .option("inferSchema","true") \
-    .load('/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/cleaned_data.csv') \
-    .toDF(*header.columns)
+
+csv_df = spark.read \
+.format("csv") \
+.option("header", "true") \
+.option("inferSchema","true") \
+.load(sys.argv[1]+ 'Input_data/cleaned_data.csv') \
+.toDF(*header.columns)
 
 
 ## below code reads CSV file which has headers included
@@ -47,27 +43,27 @@ try:
 #Null entries are removed.
 # csv_df=csv_df.dropna()
 
-    #changing datatype of dataset date columns to timestamp from string
-    csv_df = csv_df.withColumn('order_purchase_timestamp', csv_df['order_purchase_timestamp'].cast('timestamp'))
-    csv_df = csv_df.withColumn('order_aproved_at', csv_df['order_aproved_at'].cast('timestamp'))
-    csv_df = csv_df.withColumn('order_delivered_customer_date', csv_df['order_delivered_customer_date'].cast('timestamp'))
+#changing datatype of dataset date columns to timestamp from string
+csv_df = csv_df.withColumn('order_purchase_timestamp', csv_df['order_purchase_timestamp'].cast('timestamp'))
+csv_df = csv_df.withColumn('order_aproved_at', csv_df['order_aproved_at'].cast('timestamp'))
+csv_df = csv_df.withColumn('order_delivered_customer_date', csv_df['order_delivered_customer_date'].cast('timestamp'))
 
-    # declaring some functions to export date,year,weekday,week from the timestamp so that we can add seperate columns on it.
-    # this will help in writing smaller and easier queries.
+# declaring some functions to export date,year,weekday,week from the timestamp so that we can add seperate columns on it.
+# this will help in writing smaller and easier queries.
 
-    UDF_year = udf(lambda x: x.isocalendar()[0])
-    UDF_week = udf(lambda x: x.isocalendar()[1])
-    UDF_weekday = udf(lambda x: x.isocalendar()[2])
-    UDF_date = udf(lambda x: x.date().isoformat())
+UDF_year = udf(lambda x: x.isocalendar()[0])
+UDF_week = udf(lambda x: x.isocalendar()[1])
+UDF_weekday = udf(lambda x: x.isocalendar()[2])
+UDF_date = udf(lambda x: x.date().isoformat())
 
-    # adding some extra columns based on the data from above UDFs
-    csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_timestamp")))
-    csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
-    csv_df = csv_df.withColumn("order_purchase_weekday", UDF_weekday(col("order_purchase_timestamp")))
-    csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_timestamp")).cast('date'))
-except Exception as e:
-    print (" Exeception occured: " + str(e))    
+# adding some extra columns based on the data from above UDFs
+csv_df = csv_df.withColumn("order_purchase_year", UDF_year(col("order_purchase_timestamp")))
+csv_df = csv_df.withColumn("order_purchase_week", UDF_week(col("order_purchase_timestamp")))
+csv_df = csv_df.withColumn("order_purchase_weekday", UDF_weekday(col("order_purchase_timestamp")))
+csv_df = csv_df.withColumn("order_purchase_date", UDF_date(col("order_purchase_timestamp")).cast('date'))
+
 csv_df.printSchema()
+   
 
 # csv_df.show(2,vertical=True)
 # csv_df.createOrReplaceTempView("ecommerce")
@@ -275,7 +271,7 @@ print(len(df_names))
 #exporting query data to local storage in CSV format
 try:
     for key,value in df_names.items():
-        value.write.mode('overwrite').csv(path = "/Users/_charjan/Desktop/Training/Mock_project/Amazon-Mock-Project/data/Output_CSVs/" + key, header= True)
+        value.write.mode('overwrite').csv(path = sys.argv[2]+ "/output/" + key, header= True)
 except Exception as e:
     print (" Exception occured: " + str(e))
 
