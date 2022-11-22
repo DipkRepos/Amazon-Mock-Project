@@ -199,8 +199,10 @@ NOSQL DB (MONGO DB)
 
 Connecting to EMR through SSH
 - ssh -i <key_pair_name>.pem <ec2@user>.compute-1.amazonaws.com
+- 
 Copy's folders from local to EMR
 - scp -i <key_pair_name>.pem <local folder path> <ec2@user>.compute-1.amazonaws.com:~/.
+ 
 Run spark commnad
 - spark-submit <code_filename>.py <s3_input_path> <s3_output_path>
 
